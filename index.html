@@ -1,8 +1,18 @@
 <html>
+    <link rel="stylesheet" href="https://leeoniya.github.io/uPlot/dist/uPlot.min.css">
+    <style>
+        .dygraph-title {
+            color: gray;
+        }
+    </style>
 <body>
-
+    <script src="https://raw.githubusercontent.com/leeoniya/uPlot/master/dist/uPlot.iife.min.js"></script>
+    <h2 id="wait">Loading lib....</h2>
+    <div id="chart1" class="my-chart"></div>
+    
 
 </body>
+
 
 <script>
 
@@ -17,6 +27,37 @@
             })
         }
         console.log(response);
+
+        let opts = {
+            title: "My Chart",
+            id: "chart1",
+            class: "my-chart",
+            width: 800,
+            height: 600,
+            series: [
+                {},
+                {
+                // initial toggled state (optional)
+                show: true,
+
+                spanGaps: false,
+
+                // in-legend display
+                label: "RAM",
+                value: (self, rawValue) => "$" + rawValue.toFixed(2),
+
+                // series style
+                stroke: "red",
+                width: 1,
+                fill: "rgba(255, 0, 0, 0.3)",
+                dash: [10, 5],
+                }
+            ],
+            };
+
+            let uplot = new uPlot(opts, data, document.body);
+
+
     });
 
 </script>
