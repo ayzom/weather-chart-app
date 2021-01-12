@@ -9,7 +9,14 @@
     fetch("https://api.weatherapi.com/v1/forecast.json?key=3738897fde7047f0a1822737203011&q=20171&days=1")
     .then(res => res.json())
     .then(result=> {
-        console.log({result});
+        const {current: {temp_f}, forecast: {forecastday:[{hour}]}} = result;
+        const response =  {
+            temp_f,
+            forecast: hour.map(item => {
+                return {time: item.time, temp_f: item.temp_f}
+            })
+        }
+        console.log(response);
     });
 
 </script>
