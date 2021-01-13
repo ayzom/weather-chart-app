@@ -1,64 +1,80 @@
+<!DOCTYPE HTML>
 <html>
-    <link rel="stylesheet" href="https://leeoniya.github.io/uPlot/dist/uPlot.min.css">
-    <style>
-        .dygraph-title {
-            color: gray;
-        }
-    </style>
-<body>
-    <script src="https://raw.githubusercontent.com/leeoniya/uPlot/master/dist/uPlot.iife.min.js"></script>
-    <h2 id="wait">Loading lib....</h2>
-    <div id="chart1" class="my-chart"></div>
-    
 
+<head>
+    <script>
+        window.onload = function () {
+
+            setInterval(function(){
+                fetch("https://api.weatherapi.com/v1/forecast.json?key=3738897fde7047f0a1822737203011&q=20171&days=1")
+                .then(res => res.json())
+                .then(result => {
+                    const { current: { temp_f }, forecast: { forecastday: [{ hour }] } } = result;
+                    const response = {
+                        temp_f,
+                        forecast: hour.map(item => {
+                            return { x: new Date(item.time), y: item.temp_f }
+                        })
+                    }
+                    console.log(response);
+                    loadChart(response.forecast);
+                });
+            }, 5000);
+
+            function loadChart(dataSeries) {
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    title: {
+                        text: "Weather Forecast"
+                    },
+                    axisX: {
+                        valueFormatString: "HH:MM"
+                    },
+                    axisY2: {
+                        title: "Weather Forecast",
+                        prefix: "",
+                        suffix: "F"
+                    },
+                    toolTip: {
+                        shared: true
+                    },
+                    legend: {
+                        cursor: "pointer",
+                        verticalAlign: "top",
+                        horizontalAlign: "center",
+                        dockInsidePlotArea: true,
+                        itemclick: toogleDataSeries
+                    },
+                    data: [{
+                        type: "line",
+                        axisYType: "secondary",
+                        name: "Virginia",
+                        showInLegend: true,
+                        markerSize: 0,
+                        yValueFormatString: "##.# F",
+                        dataPoints: dataSeries
+                    }
+                    ]
+                });
+                chart.render();
+            }
+
+
+            function toogleDataSeries(e) {
+                if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                    e.dataSeries.visible = false;
+                } else {
+                    e.dataSeries.visible = true;
+                }
+                chart.render();
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </body>
 
-
-<script>
-
-    fetch("https://api.weatherapi.com/v1/forecast.json?key=3738897fde7047f0a1822737203011&q=20171&days=1")
-    .then(res => res.json())
-    .then(result=> {
-        const {current: {temp_f}, forecast: {forecastday:[{hour}]}} = result;
-        const response =  {
-            temp_f,
-            forecast: hour.map(item => {
-                return {time: item.time, temp_f: item.temp_f}
-            })
-        }
-        console.log(response);
-
-        let opts = {
-            title: "My Chart",
-            id: "chart1",
-            class: "my-chart",
-            width: 800,
-            height: 600,
-            series: [
-                {},
-                {
-                // initial toggled state (optional)
-                show: true,
-
-                spanGaps: false,
-
-                // in-legend display
-                label: "RAM",
-                value: (self, rawValue) => "$" + rawValue.toFixed(2),
-
-                // series style
-                stroke: "red",
-                width: 1,
-                fill: "rgba(255, 0, 0, 0.3)",
-                dash: [10, 5],
-                }
-            ],
-            };
-
-            let uplot = new uPlot(opts, data, document.body);
-
-
-    });
-
-</script>
 </html>
