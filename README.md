@@ -54,3 +54,5 @@ Make a call to the API provided above. Clean up the data return JSON response in
 Output:
 
 https://i.ibb.co/XxcxpGc/output.png
+
+<img width="900" alt="example" src=https://i.ibb.co/XxcxpGc/output.png"/>
