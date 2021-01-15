@@ -50,3 +50,7 @@ Make a call to the API provided above. Clean up the data return JSON response in
  
 
 + Frontend (React)
+
+Output:
+
+https://i.ibb.co/XxcxpGc/output.png
